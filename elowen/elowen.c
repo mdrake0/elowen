@@ -5,8 +5,7 @@
 
 int main() {
     char c;
-    while ((c = getchar()) && c != QUIT_KEY) {
-        printf("enter 'q' to quit\n");
+    while (true) {
         render();
     }
 }
