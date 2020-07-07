@@ -1,0 +1,7 @@
+#ifndef REQUIREMENTS_H
+#define REQUIREMENTS_H
+
+#define MIN_TERMINAL_WIDTH 80
+#define MIN_TERMINAL_HEIGHT 24
+
+#endif
