@@ -1,6 +1,7 @@
 /**
  * This file contains functions that render the game world to the terminal.
  */
+#include <curses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,6 +12,7 @@
 #include "input_keys.h"
 #include "render.h"
 #include "requirements.h"
+#include "runes.h"
 
 struct Point {
     int x;
@@ -19,8 +21,8 @@ struct Point {
 
 struct Point getTopLeft(struct winsize size) {
     struct Point pos;
-    pos.x = 0;
-    pos.y = 0;
+    pos.x = 10;
+    pos.y = 10;
     return pos;
 }
 
@@ -35,6 +37,14 @@ void render() {
     struct winsize size;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
     bool validWindowSize = isWindowValid(size);
+
+    // Init curses
+    initscr();
+    cbreak();
+    noecho();
+    nonl();
+    intrflush(stdscr, FALSE);
+    keypad(stdscr, TRUE);
 
     if (!validWindowSize) {
         renderDimensionError(size);
@@ -57,5 +67,20 @@ void renderDimensionError(struct winsize size) {
 
 // Renders the game in an 80x24 rectangle with a top-left position of `pos`.
 void renderGame(struct Point pos) {
-    void renderOutline();
+    renderOutline(pos);
+    refresh();
+}
+
+// Draws an outline around the play area
+void renderOutline(struct Point pos) {
+    int upperX = pos.x+80;
+    int upperY = pos.y+24;
+
+    for (int i = pos.y; i < upperY; ++i) {
+        for (int j = pos.x; j < upperX; ++j) {
+            if (i == pos.y || i == upperY-1 || j == pos.x || j == upperX-1) {
+                mvaddch(i, j, BORDER_RUNE);
+            }
+        }
+    }
 }

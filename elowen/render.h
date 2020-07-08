@@ -11,6 +11,6 @@ bool isWindowValid(struct winsize size);
 void render();
 void renderDimensionError(struct winsize size);
 void renderGame(struct Point pos);
-void renderOutline();
+void renderOutline(struct Point pos);
 
 #endif

@@ -4,7 +4,7 @@
 #include "render.h"
 
 int main() {
-    char c;
+    // Game loop
     while (true) {
         render();
     }
