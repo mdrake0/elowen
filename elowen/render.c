@@ -19,10 +19,11 @@ struct Point {
     int y;
 };
 
+// Returns top left position of game window based on terminal size.
 struct Point getTopLeft(struct winsize size) {
     struct Point pos;
-    pos.x = 10;
-    pos.y = 10;
+    pos.x = 0;
+    pos.y = 0;
     return pos;
 }
 
@@ -37,14 +38,6 @@ void render() {
     struct winsize size;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
     bool validWindowSize = isWindowValid(size);
-
-    // Init curses
-    initscr();
-    cbreak();
-    noecho();
-    nonl();
-    intrflush(stdscr, FALSE);
-    keypad(stdscr, TRUE);
 
     if (!validWindowSize) {
         renderDimensionError(size);
@@ -73,8 +66,8 @@ void renderGame(struct Point pos) {
 
 // Draws an outline around the play area
 void renderOutline(struct Point pos) {
-    int upperX = pos.x+80;
-    int upperY = pos.y+24;
+    int upperX = pos.x+MIN_TERMINAL_WIDTH;
+    int upperY = pos.y+MIN_TERMINAL_HEIGHT;
 
     for (int i = pos.y; i < upperY; ++i) {
         for (int j = pos.x; j < upperX; ++j) {
